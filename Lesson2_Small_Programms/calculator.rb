@@ -1,4 +1,4 @@
-#psuedo code
+# Simple program, building calculator and maping the logic in Pseudo-Code
 
 # ask the user for two numbers
 # ask the user for an operation to perform
