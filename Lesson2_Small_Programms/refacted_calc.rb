@@ -5,21 +5,38 @@ def prompt(message)
   Kernel.puts("=> #{message}")
 end
 
-def valid_number?(num)
-  num.to_i() != 0
+def integer?(input)
+  #num.to_i() != 0
+  # Better integer validation, bonus feature.
+  input.to_i.to_s == input
 end
 
+def float?(input)
+  input.to_f.to_s == input
+end
+
+# Method that tests to see whether the input is either number or float
+def number?(input)
+  integer?(input) || float?(input)
+end
+
+# method to dispaly the operation to be performed
 def operation_to_message(op)
-  case op
-  when '1'
-    'Adding'
-  when '2'
-    'Subtracting'
-  when '3'
-    'Multiplying'
-  when '4'
-    'Dividing'
-  end
+  # saving the return of the case to variable 
+  word = case op
+           when '1'
+             'Adding'
+           when '2'
+             'Subtracting'
+           when '3'
+             'Multiplying'
+           when '4'
+             'Dividing'
+         end
+
+  x = "A random line of code"
+
+  word
 end
 
 prompt("Welcome to Calculator! Enter your name:")
@@ -43,7 +60,7 @@ loop do
     prompt("What's the first number?")
     number1 = Kernel.gets().chomp
 
-    if valid_number?(number1)
+    if number?(number1)
       break
     else
       prompt("Hmm.... that doesn't look like a valid number")
@@ -56,7 +73,7 @@ loop do
     prompt("What's second number?")
     number2 = Kernel.gets().chomp
 
-    if valid_number?(number2)
+    if number?(number2)
       break
     else
       prompt("Hmm.... that doesn't look like a valid number")
