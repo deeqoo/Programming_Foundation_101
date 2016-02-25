@@ -1,0 +1,32 @@
+# calculator_messages.yml
+# Grouping all messages together for cleaner code 
+# reorganizing the calculator_messages.yml to internationalize
+
+en: 
+  welcome: "Welcome to Calculator! Enter your name:"
+  valid_name: "Make sure to enter a valid name."
+es:
+  welcome: "Bienvenido a la calculadora! Entre su nombre:"
+  valid_name: "Asegúrese de entrar un nombre válido."
+first_num: "What's the first number?"
+error_message: "Hmm.... that doesn't look like a valid number?"
+second_num: "What's the second number?"
+greeting: "Hello,"
+operator: |
+  What operation would you like to perform?
+  1) add
+  2) subtract
+  3) mutliply
+  4) divide
+
+operator_choice: "Must choose 1,2,3 or 4!"
+adding: "Adding"
+subtracting: "Subtracting"
+multiplying: "Multiplying"
+dividing: "Dividing"
+operator_action: "the two numbers..."
+result: "The result is:"
+continue: "Do you want to perform another calculation? (Y to calculate again)"
+goodbye: "Thank you for using calculator. Goodbye."
+
+

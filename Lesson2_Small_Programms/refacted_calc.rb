@@ -1,7 +1,18 @@
 # Refactorying calculator application from previous calculator app
 
 # method to add prompt to messages on screen for readability
+# Setting language for the the program
+LANGUAGE = 'en'
+
+require 'yaml'
+MESSAGES = YAML.load_file('calculator_messages.yml')
+
+def messages(message, lang='en')
+  MESSAGES[lang][message]
+end
+
 def prompt(message)
+  #message = messages(key, LANGUAGE)
   Kernel.puts("=> #{message}")
 end
 
@@ -25,13 +36,13 @@ def operation_to_message(op)
   # saving the return of the case to variable 
   word = case op
            when '1'
-             'Adding'
+             MESSAGES['adding']
            when '2'
-             'Subtracting'
+             MESSAGES['subtracting']
            when '3'
-             'Multiplying'
+             MESSAGES['multiplying']
            when '4'
-             'Dividing'
+             MESSAGES['dividing']
          end
 
   x = "A random line of code"
@@ -39,17 +50,17 @@ def operation_to_message(op)
   word
 end
 
-prompt("Welcome to Calculator! Enter your name:")
+prompt(messages('welcome', LANGUAGE))
 
 name = ''
 loop do
   name = Kernel.gets().chomp()
 
   break unless name.empty?()
-  prompt("Make sure to use a valid name.")
+  prompt(MESSAGES['valid_name'])
 end
 
-prompt("Hi #{name}")
+prompt("#{MESSAGES['greeting']} #{name}")
 
 # main loop of the applicaion
 loop do
@@ -57,26 +68,26 @@ loop do
 
   # looping for checking number and repeating until valid number entered
   loop do
-    prompt("What's the first number?")
+    prompt(MESSAGES['first_num'])
     number1 = Kernel.gets().chomp
 
     if number?(number1)
       break
     else
-      prompt("Hmm.... that doesn't look like a valid number")
+      prompt(MESSAGES['error_message'])
     end
   end
 
   number2 = ''
 
   loop do
-    prompt("What's second number?")
+    prompt(MESSAGES['second_num'])
     number2 = Kernel.gets().chomp
 
     if number?(number2)
       break
     else
-      prompt("Hmm.... that doesn't look like a valid number")
+      prompt(MESSAGES['error_message'])
     end
   end
 
@@ -88,7 +99,7 @@ loop do
     4) divide
   MSG
 
-  prompt(operator_prompt)
+  prompt(MESSAGES['operator'])
   operator = ''
 
   loop do
@@ -97,7 +108,7 @@ loop do
     if %w(1 2 3 4).include?(operator)
       break
     else
-      prompt("Must choose 1, 2, 3 or 4")
+      prompt(MESSAGES['operator_choice'])
     end
   end
 
@@ -113,14 +124,14 @@ loop do
              number1.to_f() / number2.to_f()
            end
 
-  prompt("#{operation_to_message(operator)} the two numbers")
+  prompt("#{operation_to_message(operator)} #{MESSAGES['operator_action']}")
 
-  prompt("The result is: #{result}")
+  prompt("#{MESSAGES['result']} #{result}")
 
-  prompt("Do you want to perform another calculation? (Y to caluclate again)")
+  prompt(MESSAGES['continue'])
   answer = Kernel.gets().chomp
   # breaking the loop unless user enters 'y' to continue for more calculation.
   break unless answer.downcase().start_with?('y')
 end
 
-prompt("Thank you for using the calculator. Good bye!")
+prompt(MESSAGES['goodbye'])
