@@ -1,27 +1,28 @@
-# Refactorying calculator application from previous calculator app
+# Refactorying calculator application to add extra features
 
-# method to add prompt to messages on screen for readability
 # Setting language for the the program
 LANGUAGE = 'en'
 
 require 'yaml'
 MESSAGES = YAML.load_file('calculator_messages.yml')
 
-def messages(message, lang='en')
+def messages(message, lang = 'en')
   MESSAGES[lang][message]
 end
 
 def prompt(message)
-  #message = messages(key, LANGUAGE)
+  # message = messages(key, LANGUAGE)
   Kernel.puts("=> #{message}")
 end
 
+# Checking if numuber is integer
 def integer?(input)
-  #num.to_i() != 0
+  # num.to_i() != 0
   # Better integer validation, bonus feature.
   input.to_i.to_s == input
 end
 
+# Checkig if it's flaot number
 def float?(input)
   input.to_f.to_s == input
 end
@@ -33,19 +34,17 @@ end
 
 # method to dispaly the operation to be performed
 def operation_to_message(op)
-  # saving the return of the case to variable 
+  # saving the return of the case to variable
   word = case op
-           when '1'
-             MESSAGES['adding']
-           when '2'
-             MESSAGES['subtracting']
-           when '3'
-             MESSAGES['multiplying']
-           when '4'
-             MESSAGES['dividing']
+         when '1'
+           MESSAGES['adding']
+         when '2'
+           MESSAGES['subtracting']
+         when '3'
+           MESSAGES['multiplying']
+         when '4'
+           MESSAGES['dividing']
          end
-
-  x = "A random line of code"
 
   word
 end
@@ -66,7 +65,7 @@ prompt("#{MESSAGES['greeting']} #{name}")
 loop do
   number1 = ''
 
-  # looping for checking number and repeating until valid number entered
+  # looping to check valid number and repeating until its enetered
   loop do
     prompt(MESSAGES['first_num'])
     number1 = Kernel.gets().chomp
@@ -112,7 +111,7 @@ loop do
     end
   end
 
-  # using case statement instead of if/else to evaluate the operator selection
+  # using case statement to evaluate the operator selection
   result = case operator
            when '1'
              number1.to_i() + number2.to_i()
@@ -130,6 +129,7 @@ loop do
 
   prompt(MESSAGES['continue'])
   answer = Kernel.gets().chomp
+
   # breaking the loop unless user enters 'y' to continue for more calculation.
   break unless answer.downcase().start_with?('y')
 end
