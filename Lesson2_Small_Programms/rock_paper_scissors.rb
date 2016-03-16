@@ -23,7 +23,7 @@ def display_result(player, computer)
   end
 end
 
-loop do # Loop for choice validation. 
+loop do # Loop for choice validation.
   choice = ''
   loop do
     prompt("Choone one: #{VALID_CHOICES.join(' ')}")
