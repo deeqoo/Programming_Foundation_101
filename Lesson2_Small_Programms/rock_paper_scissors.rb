@@ -80,7 +80,7 @@ MSG
 
 prompt(display_terms)
 
-loop do # Main loop.
+loop do
   player_score = 0
   computer_score = 0
 
