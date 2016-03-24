@@ -59,6 +59,7 @@ numbers.each_with_index do |number, index|
 end
 
 # Question 5, all factors of the input number
+puts "factors method"
 def factors(number)
   dividend = number
   divisors = []
@@ -69,7 +70,7 @@ def factors(number)
   divisors
 end
 
-puts factors(5)
+puts factors(8)
 # Bonus Answer 1
 # Determines if the result of the division is an integer 
 # it will only add number to the divisors array if there's 
