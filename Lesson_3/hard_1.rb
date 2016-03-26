@@ -104,7 +104,7 @@ def generate_UUID
   uuid
 end
 
-puts generate_UUID
+p generate_UUID
 
 # Question 5, 
 def is_a_number?(number)
