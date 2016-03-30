@@ -1,6 +1,5 @@
 # Tic Tac Toe Game
 
-require 'pry'
 WINNING_LINES = [[1, 2, 3], [4, 5, 6], [7, 8, 9]] + # rows
                 [[1, 4, 7], [2, 5, 8], [3, 6, 9]] + # cols
                 [[1, 5, 9], [3, 5, 7]].freeze       # diagonals
@@ -41,10 +40,15 @@ def empty_squares(brd)
   brd.keys.select { |num| brd[num] == INITIAL_MARKER }
 end
 
+def joinor(arr, delimeter=', ', word='or')
+  arr[-1] = "#{word} #{arr.last}" if arr.size > 1
+  arr.join(delimeter)
+end
+
 def player_places_piece!(brd)
   square = ''
   loop do
-    prompt "Chooose a square (#{empty_squares(brd).join(', ')})"
+    prompt "Chooose a square #{joinor(empty_squares(brd),', ')}"
     square = gets.chomp.to_i
     break if empty_squares(brd).include?(square)
     prompt "Sorry that's not valid choice."
@@ -76,6 +80,7 @@ def detect_winner(brd)
   nil
 end
 
+
 loop do
   board = initialize_board
 
@@ -97,6 +102,7 @@ loop do
     prompt "It's tie!"
   end
 
+  winning_log('player', 'computer')
   prompt "Do you want to play agin? (y or n)"
   answer = gets.chomp
   break unless answer.downcase.start_with?('y')
