@@ -1,5 +1,5 @@
 # Tic Tac Toe Game
-
+require 'pry'
 WINNING_LINES = [[1, 2, 3], [4, 5, 6], [7, 8, 9]] + # rows
                 [[1, 4, 7], [2, 5, 8], [3, 6, 9]] + # cols
                 [[1, 5, 9], [3, 5, 7]].freeze       # diagonals
@@ -7,6 +7,9 @@ WINNING_LINES = [[1, 2, 3], [4, 5, 6], [7, 8, 9]] + # rows
 INITIAL_MARKER = ' '.freeze
 PLAYER_MARKER = 'X'.freeze
 COMPUTER_MARKER = 'O'.freeze
+
+winning_score = {player: 0, computer: 0}
+game_round = 1
 
 def prompt(msg)
   puts "=> #{msg}"
@@ -80,10 +83,30 @@ def detect_winner(brd)
   nil
 end
 
+def increase_score(board, winning_score)
+  if detect_winner(board) == 'Player'
+    winning_score[:player] += 1
+  elsif detect_winner(board) == 'Computer'
+    winning_score[:computer] += 1
+  end
+end
 
-loop do
+def winner(winning_score)
+  if winning_score[:player] == 5
+    prompt("You won the game")
+    winning_score = {player: 0, computer: 0}
+  elsif winning_score[:computer] == 5
+    prompt("sorry you lost and computer won!")
+    winning_score = {player: 0, computer: 0}
+  end
+end
+
+def display_score(winning_score)
+  prompt("Player score is: #{winning_score[:player]} & compuer score is: #{winning_score[:computer]}")
+end
+
+loop do # main loop 
   board = initialize_board
-
   loop do
     display_board(board)
 
@@ -102,10 +125,14 @@ loop do
     prompt "It's tie!"
   end
 
-  winning_log('player', 'computer')
+  game_round +=1
+  increase_score(board, winning_score)
+  display_score(winning_score)
+  winner(winning_score)
+
   prompt "Do you want to play agin? (y or n)"
   answer = gets.chomp
   break unless answer.downcase.start_with?('y')
-end
+end # end of main loop
 
 prompt "Thanks for playing Tic Tac Toe! Good bye!"
