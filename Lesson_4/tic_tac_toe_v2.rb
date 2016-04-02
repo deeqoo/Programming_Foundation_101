@@ -102,7 +102,7 @@ def winner(winning_score)
 end
 
 def display_score(winning_score)
-  prompt("score of this round is, Player: #{winning_score[:player]} & Compuer: #{winning_score[:computer]}")
+  prompt("score of this round, player: #{winning_score[:player]} & compuer: #{winning_score[:computer]}")
 end
 
 def reset_scores(winning_score)
@@ -111,33 +111,39 @@ def reset_scores(winning_score)
 end
 
 loop do # main loop 
-  board = initialize_board
-  loop do # board making loop.
+
+  loop do # second loop
+    
+    board = initialize_board
+    
+    loop do # boad marking loop.
+      display_board(board)
+
+      player_places_piece!(board)
+      break if someone_won?(board) || board_full?(board)
+
+      computer_places_piece!(board)
+      break if someone_won?(board) || board_full?(board)
+    end # end of board making loop. 
+
     display_board(board)
+    game_round +=1
+    increase_score(board, winning_score)
+    display_score(winning_score)
+    winner(winning_score)
+    
+    if someone_won?(board)
+      prompt "#{detect_winner(board)} won!"
+    else
+      prompt "It's tie!"
+    end
 
-    player_places_piece!(board)
-    break if someone_won?(board) || board_full?(board)
-
-    computer_places_piece!(board)
-    break if someone_won?(board) || board_full?(board)
-  end # end of board making loop. 
-
-  display_board(board)
-
-  if someone_won?(board)
-    prompt "#{detect_winner(board)} won!"
-  else
-    prompt "It's tie!"
-  end
-
-  game_round +=1
-  increase_score(board, winning_score)
-  display_score(winning_score)
-  winner(winning_score)
+    break if winning_score.values.include?(5)
+  end # end of second loop.
 
   prompt "Do you want to play agin? (y or n)"
   answer = gets.chomp
-  reset_scores(winning_score) if winning_score.values.include?(5) 
+  reset_scores(winning_score)
   break unless answer.downcase.start_with?('y')
 end # end of main loop
 
