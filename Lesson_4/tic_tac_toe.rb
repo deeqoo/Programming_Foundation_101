@@ -93,16 +93,16 @@ end
 
 def winner(winning_score)
   if winning_score[:player] == 5
-    prompt("You won the game")
-    winning_score = {player: 0, computer: 0}
+    prompt("You won the match!")
   elsif winning_score[:computer] == 5
-    prompt("sorry you lost and computer won!")
-    winning_score = {player: 0, computer: 0}
+    prompt("Computer has won the match!")
   end
+  winning_score
 end
 
 def display_score(winning_score)
-  prompt("score of this round is, Player: #{winning_score[:player]} & Compuer: #{winning_score[:computer]}")
+  prompt("score of this round, player: #{winning_score[:player]} & compuer: #{winning_score[:computer]}")
+  winning_score
 end
 
 def reset_scores(winning_score)
@@ -111,33 +111,44 @@ def reset_scores(winning_score)
 end
 
 loop do # main loop 
-  board = initialize_board
-  loop do # board making loop.
-    display_board(board)
-
-    player_places_piece!(board)
-    break if someone_won?(board) || board_full?(board)
-
-    computer_places_piece!(board)
-    break if someone_won?(board) || board_full?(board)
-  end # end of board making loop. 
-
-  display_board(board)
-
-  if someone_won?(board)
-    prompt "#{detect_winner(board)} won!"
-  else
-    prompt "It's tie!"
-  end
-
-  game_round +=1
-  increase_score(board, winning_score)
   display_score(winning_score)
-  winner(winning_score)
+  loop do # second loop
+    
+    board = initialize_board
+    
+    loop do # boad marking loop.
+      display_board(board)
 
-  prompt "Do you want to play agin? (y or n)"
+      player_places_piece!(board)
+      break if someone_won?(board) || board_full?(board)
+
+      computer_places_piece!(board)
+      break if someone_won?(board) || board_full?(board)
+    end # end of board making loop. 
+
+    display_board(board)
+    if someone_won?(board)
+      prompt "#{detect_winner(board)} won the game!"
+    else
+      prompt "It's tie!"
+    end
+    
+    game_round +=1
+    increase_score(board, winning_score)
+    display_score(winning_score)
+    break if winning_score.values.include?(5)
+    
+    prompt ("Press 'c' for next game or any key to quit.")
+    answer = gets.chomp
+    break unless answer.downcase.start_with?("c") 
+
+    
+  end # end of second loop.
+
+  winner(winning_score) 
+  prompt "Do you want to play another match? (y or n)"
   answer = gets.chomp
-  reset_scores(winning_score) if winning_score.values.include?(5) 
+  reset_scores(winning_score)
   break unless answer.downcase.start_with?('y')
 end # end of main loop
 
