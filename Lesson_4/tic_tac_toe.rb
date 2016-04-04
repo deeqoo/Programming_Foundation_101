@@ -1,5 +1,5 @@
 # Tic Tac Toe Game
-require 'pry'
+
 WINNING_LINES = [[1, 2, 3], [4, 5, 6], [7, 8, 9]] + # rows
                 [[1, 4, 7], [2, 5, 8], [3, 6, 9]] + # cols
                 [[1, 5, 9], [3, 5, 7]].freeze       # diagonals
@@ -73,13 +73,21 @@ def someone_won?(brd)
 end
 
 def detect_winner(brd)
-  WINNING_LINES.each do |line|
+  for line in WINNING_LINES
     if brd.values_at(*line).count(PLAYER_MARKER) == 3
       return 'Player'
     elsif brd.values_at(*line).count(COMPUTER_MARKER) == 3
       return 'Computer'
     end
   end
+
+  # WINNING_LINES.each do |line|
+  #   if brd.values_at(*line).count(PLAYER_MARKER) == 3
+  #     return 'Player'
+  #   elsif brd.values_at(*line).count(COMPUTER_MARKER) == 3
+  #     return 'Computer'
+  #   end
+  # end
   nil
 end
 
