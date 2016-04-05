@@ -7,6 +7,7 @@ WINNING_LINES = [[1, 2, 3], [4, 5, 6], [7, 8, 9]] + # rows
 INITIAL_MARKER = ' '.freeze
 PLAYER_MARKER = 'X'.freeze
 COMPUTER_MARKER = 'O'.freeze
+PLAYER = 'computer'
 
 winning_score = {player: 0, computer: 0}
 game_round = 1
@@ -157,33 +158,31 @@ def reset_scores(winning_score)
 end
 
 loop do # main loop 
-
+   
   loop do # second loop
-    
     board = initialize_board
+   
     display_board(board)
-    prompt("Round: #{game_round}")
+    prompt("Round: #{game_round}") # why is this line not running?
+    #sleep 6  # is the only I see the above line on the screen.
 
-    first_player = ''
-  
-    loop do
-      prompt("Do you want to move first? (y/n)")
-      answer = gets.chomp
-      if answer.downcase == 'y'
-        first_player = 'player'
-        break
-      elsif answer.downcase == 'n'
-        first_player = 'computer'
-        break
+    if PLAYER == 'choose'
+      prompt("Do you want go first?(y or n)")
+      reply = gets.chomp
+      if reply == 'y'
+        current_player = 'player'
+      elsif reply == 'n'
+        current_player = 'computer'
       else
-        prompt("You have put in an invalid answer")
+        prompt("That's not valid choice.")
       end
-     end
+    end
 
-    current_player = first_player
+    if PLAYER != 'choose'
+      current_player = PLAYER
+    end
     
     loop do # boad marking loop.
-      
       display_board(board)
       places_piece!(board, current_player)
       current_player = alternate_player(current_player)
@@ -199,6 +198,7 @@ loop do # main loop
     end
     
     game_round +=1
+    #binding.pry
     increase_score(board, winning_score)
     display_score(winning_score)
     break if winning_score.values.include?(5)
@@ -207,8 +207,6 @@ loop do # main loop
     prompt ("Press 'c' for next game or any key to quit.")
     answer = gets.chomp
     break unless answer.downcase.start_with?("c") 
-
-    
   end # end of second loop.
 
   winner(winning_score) 
