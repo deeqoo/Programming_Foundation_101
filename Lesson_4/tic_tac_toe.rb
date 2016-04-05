@@ -1,5 +1,5 @@
 # Tic Tac Toe Game
-
+require 'pry'
 WINNING_LINES = [[1, 2, 3], [4, 5, 6], [7, 8, 9]] + # rows
                 [[1, 4, 7], [2, 5, 8], [3, 6, 9]] + # cols
                 [[1, 5, 9], [3, 5, 7]].freeze       # diagonals
@@ -17,6 +17,7 @@ end
 
 def display_board(brd)
   system 'clear'
+  puts "Win 5 games to win the match."
   puts "You are #{PLAYER_MARKER} & Computer is #{COMPUTER_MARKER}"
   puts ""
   puts "     |     |"
@@ -48,6 +49,22 @@ def joinor(arr, delimeter=', ', word='or')
   arr.join(delimeter)
 end
 
+def find_at_risk_square(line, board, marker)
+  if board.values_at(*line).count(marker) == 2
+    board.select {|square, value| line.include?(square) && value == INITIAL_MARKER}.keys.first
+  else
+    nil
+  end 
+end
+
+def offense_move(board, marker, square)
+  WINNING_LINES.each do |line|
+    square = find_at_risk_square(line, board, marker)
+    break if square
+  end
+  square
+end
+
 def player_places_piece!(brd)
   square = ''
   loop do
@@ -60,7 +77,20 @@ def player_places_piece!(brd)
 end
 
 def computer_places_piece!(brd)
-  square = empty_squares(brd).sample
+  square = nil
+
+  square = offense_move(brd, COMPUTER_MARKER, square)
+
+  if !square
+    square = offense_move(brd, PLAYER_MARKER, square)
+  end
+
+  if !square && brd[5] == INITIAL_MARKER
+    brd[5] = COMPUTER_MARKER
+  elsif !square
+    square = empty_squares(brd).sample
+  end
+  
   brd[square] = COMPUTER_MARKER
 end
 
@@ -80,14 +110,6 @@ def detect_winner(brd)
       return 'Computer'
     end
   end
-
-  # WINNING_LINES.each do |line|
-  #   if brd.values_at(*line).count(PLAYER_MARKER) == 3
-  #     return 'Player'
-  #   elsif brd.values_at(*line).count(COMPUTER_MARKER) == 3
-  #     return 'Computer'
-  #   end
-  # end
   nil
 end
 
@@ -108,6 +130,22 @@ def winner(winning_score)
   winning_score
 end
 
+def places_piece!(brd, current_player)
+  if current_player == 'computer'
+    computer_places_piece!(brd)
+  else
+    player_places_piece!(brd)
+  end
+end
+
+def alternate_player(current_player)
+  if current_player == 'computer'
+    'player'
+  else
+    'computer'
+  end
+end
+
 def display_score(winning_score)
   prompt("score of this round, player: #{winning_score[:player]} & compuer: #{winning_score[:computer]}")
   winning_score
@@ -119,19 +157,38 @@ def reset_scores(winning_score)
 end
 
 loop do # main loop 
-  display_score(winning_score)
+
   loop do # second loop
     
     board = initialize_board
+    display_board(board)
+    prompt("Round: #{game_round}")
+
+    first_player = ''
+  
+    loop do
+      prompt("Do you want to move first? (y/n)")
+      answer = gets.chomp
+      if answer.downcase == 'y'
+        first_player = 'player'
+        break
+      elsif answer.downcase == 'n'
+        first_player = 'computer'
+        break
+      else
+        prompt("You have put in an invalid answer")
+      end
+     end
+
+    current_player = first_player
     
     loop do # boad marking loop.
+      
       display_board(board)
-
-      player_places_piece!(board)
+      places_piece!(board, current_player)
+      current_player = alternate_player(current_player)
       break if someone_won?(board) || board_full?(board)
-
-      computer_places_piece!(board)
-      break if someone_won?(board) || board_full?(board)
+    
     end # end of board making loop. 
 
     display_board(board)
@@ -146,6 +203,7 @@ loop do # main loop
     display_score(winning_score)
     break if winning_score.values.include?(5)
     
+
     prompt ("Press 'c' for next game or any key to quit.")
     answer = gets.chomp
     break unless answer.downcase.start_with?("c") 
@@ -157,6 +215,7 @@ loop do # main loop
   prompt "Do you want to play another match? (y or n)"
   answer = gets.chomp
   reset_scores(winning_score)
+  
   break unless answer.downcase.start_with?('y')
 end # end of main loop
 
