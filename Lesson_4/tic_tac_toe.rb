@@ -1,5 +1,5 @@
 # Tic Tac Toe Game
-require 'pry'
+
 WINNING_LINES = [[1, 2, 3], [4, 5, 6], [7, 8, 9]] + # rows
                 [[1, 4, 7], [2, 5, 8], [3, 6, 9]] + # cols
                 [[1, 5, 9], [3, 5, 7]].freeze       # diagonals
@@ -158,13 +158,12 @@ def reset_scores(winning_score)
 end
 
 loop do # main loop 
-   
-  loop do # second loop
+  
+  loop do
     board = initialize_board
-   
+    
     display_board(board)
-    prompt("Round: #{game_round}") # why is this line not running?
-    #sleep 6  # is the only I see the above line on the screen.
+    
 
     if PLAYER == 'choose'
       prompt("Do you want go first?(y or n)")
@@ -182,14 +181,14 @@ loop do # main loop
       current_player = PLAYER
     end
     
-    loop do # boad marking loop.
+    loop do
       display_board(board)
+      prompt("Round: #{game_round}") 
       places_piece!(board, current_player)
       current_player = alternate_player(current_player)
       break if someone_won?(board) || board_full?(board)
+    end  
     
-    end # end of board making loop. 
-
     display_board(board)
     if someone_won?(board)
       prompt "#{detect_winner(board)} won the game!"
@@ -198,7 +197,6 @@ loop do # main loop
     end
     
     game_round +=1
-    #binding.pry
     increase_score(board, winning_score)
     display_score(winning_score)
     break if winning_score.values.include?(5)
@@ -207,7 +205,7 @@ loop do # main loop
     prompt ("Press 'c' for next game or any key to quit.")
     answer = gets.chomp
     break unless answer.downcase.start_with?("c") 
-  end # end of second loop.
+  end
 
   winner(winning_score) 
   prompt "Do you want to play another match? (y or n)"
